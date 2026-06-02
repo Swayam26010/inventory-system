@@ -17,7 +17,9 @@ from app.routers.dashboard import router as dashboard_router
 app = FastAPI()
 
 # create tables AFTER importing models
-Base.metadata.create_all(bind=engine)
+@app.on_event("startup")
+def startup():
+    Base.metadata.create_all(bind=engine)
 
 app.include_router(product_router)
 app.include_router(customer_router)
@@ -31,9 +33,7 @@ def home():
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173"
-    ],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

@@ -1,11 +1,12 @@
+import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
-import os
 
-DATABASE_URL = os.getenv(
-    "DATABASE_URL",
-    "postgresql://postgres:postgres@db:5432/inventory"
-)
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+# fallback for local Docker only
+if not DATABASE_URL:
+    DATABASE_URL = "postgresql://postgres:postgres@db:5432/inventory"
 
 engine = create_engine(DATABASE_URL)
 
@@ -16,7 +17,6 @@ SessionLocal = sessionmaker(
 )
 
 Base = declarative_base()
-
 
 def get_db():
     db = SessionLocal()
