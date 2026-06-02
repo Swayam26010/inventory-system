@@ -4,9 +4,8 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
-# fallback for local Docker only
 if not DATABASE_URL:
-    DATABASE_URL = "postgresql://postgres:postgres@db:5432/inventory"
+    raise Exception("DATABASE_URL is not set")
 
 engine = create_engine(DATABASE_URL)
 
