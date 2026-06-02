@@ -12,15 +12,7 @@ app = FastAPI(title="Inventory API")
 # =========================
 # CORS (PRODUCTION SAFE)
 # =========================
-origins = [
-    "http://localhost:5173",
-    "http://localhost:5174",
-    "http://127.0.0.1:5173",
-    "http://127.0.0.1:5174",
-    "https://inventory-system-e24t-bdd2kc79f-swayam-s-projects7.vercel.app",
-    
-    # 👉 later replace with your final Vercel domain
-]
+origins = ["*"]
 
 app.add_middleware(
     CORSMiddleware,
