@@ -1,9 +1,8 @@
 from fastapi import FastAPI
-
-from app.database import Base, engine
 from fastapi.middleware.cors import CORSMiddleware
 
-# ✅ MUST import all models BEFORE create_all
+from app.database import Base, engine
+
 from app.models.product import Product
 from app.models.customer import Customer
 from app.models.order import Order, OrderItem
@@ -16,11 +15,28 @@ from app.routers.dashboard import router as dashboard_router
 
 app = FastAPI()
 
-# create tables AFTER importing models
+# ✅ CORS FIRST (VERY IMPORTANT)
+origins = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "https://inventory-system-lrgtfa05n-swayam-s-projects7.vercel.app"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# tables init
 @app.on_event("startup")
 def startup():
     Base.metadata.create_all(bind=engine)
 
+
+# routers
 app.include_router(product_router)
 app.include_router(customer_router)
 app.include_router(order_router)
@@ -30,14 +46,3 @@ app.include_router(dashboard_router)
 @app.get("/")
 def home():
     return {"message": "Inventory API Running"}
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "https://inventory-system-git-main-swayam-s-projects7.vercel.app/"
-    ],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
