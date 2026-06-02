@@ -2,11 +2,6 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.database import Base, engine
-
-from app.models.product import Product
-from app.models.customer import Customer
-from app.models.order import Order, OrderItem
-
 from app.routers.products import router as product_router
 from app.routers.customers import router as customer_router
 from app.routers.orders import router as order_router
@@ -15,12 +10,15 @@ from app.routers.dashboard import router as dashboard_router
 app = FastAPI(title="Inventory API")
 
 # =========================
-# CORS CONFIGURATION
+# CORS (PRODUCTION SAFE)
 # =========================
 origins = [
+    "http://localhost:5173",
     "http://localhost:5174",
+    "http://127.0.0.1:5173",
     "http://127.0.0.1:5174",
-    "https://inventory-system-lrgtfa05n-swayam-s-projects7.vercel.app"
+    "https://inventory-system-lrgtfa05n-swayam-s-projects7.vercel.app",
+    # 👉 later replace with your final Vercel domain
 ]
 
 app.add_middleware(
@@ -32,7 +30,7 @@ app.add_middleware(
 )
 
 # =========================
-# DATABASE INIT
+# DB INIT
 # =========================
 @app.on_event("startup")
 def startup():
@@ -46,9 +44,6 @@ app.include_router(customer_router)
 app.include_router(order_router)
 app.include_router(dashboard_router)
 
-# =========================
-# HEALTH CHECK
-# =========================
 @app.get("/")
 def home():
     return {"message": "Inventory API Running"}
