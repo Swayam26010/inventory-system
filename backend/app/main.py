@@ -17,7 +17,7 @@ origins = [
     "http://localhost:5174",
     "http://127.0.0.1:5173",
     "http://127.0.0.1:5174",
-    "https://inventory-system-lrgtfa05n-swayam-s-projects7.vercel.app",
+    "https://inventory-system-e24t.vercel.app/products",
     # 👉 later replace with your final Vercel domain
 ]
 
