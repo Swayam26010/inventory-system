@@ -1,11 +1,14 @@
-import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
+import os
+from dotenv import load_dotenv
 
-DATABASE_URL = os.getenv("DATABASE_URL")
+load_dotenv()
 
-if not DATABASE_URL:
-    raise Exception("DATABASE_URL is not set")
+DATABASE_URL = os.getenv(
+    "DATABASE_URL",
+    "postgresql://postgres:postgres@localhost:5432/inventory"
+)
 
 engine = create_engine(DATABASE_URL)
 
